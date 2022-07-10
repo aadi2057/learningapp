@@ -18,7 +18,8 @@ questionController.getQuestions = async (req, res) => {
 };
 
 questionController.getQuestion = async (req, res) => {
-  const solvedQuestions = req.body.solved;
+  const solvedQuestions = req.query.solved;
+  console.log(solvedQuestions);
 
   if (
     solvedQuestions &&
@@ -35,13 +36,15 @@ questionController.getQuestion = async (req, res) => {
       mongoose.Types.ObjectId(q)
     );
     let hardness_match = [];
-    if (solved[0]?.hardness_level !== 5) {
+    if (solved[0]?.hardness_level !== 5 && solved[0]?.hardness_level !== 4) {
+      console.log(solved[0]?.hardness_level === 5);
+      console.log("hardness");
       hardness_match.push({
         $match: { hardness_level: { $gt: solved[0]?.hardness_level } },
       });
     }
     console.log(solvedQuestions);
-
+    console.log(hardness_match);
     const questions = await Questions.aggregate([
       {
         $match: {
@@ -68,6 +71,7 @@ questionController.getQuestion = async (req, res) => {
       },
       { $unwind: { path: "$correct_answer" } },
     ]);
+    console.log(questions);
     return res.status(200).json(questions);
   }
   console.log("Unsovlved any");
