@@ -1,4 +1,4 @@
-# Github Search Repositoris
+# Learning app
 
 ## Installation
 
